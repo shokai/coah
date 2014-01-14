@@ -1,5 +1,7 @@
 # coah
 
+![](https://raw2.github.com/geta6/coah/master/app/assets/img/coah.png)
+
 ![](https://travis-ci.org/geta6/coah.png)
 
 coah, node.js WAF template.
