@@ -35,7 +35,7 @@ module.exports = (grunt) ->
     'jade:dist', 'htmlhint:client', 'jade:release'
   ]
   grunt.registerTask 'buildstatic', [
-    'imagemin'
+    'copy', 'imagemin'
   ]
   grunt.registerTask 'default', [
     'build', 'test', 'watch'
@@ -55,7 +55,7 @@ module.exports = (grunt) ->
           expand: yes
           cwd: 'app/assets/'
           src: [ '!**/*.{jpg,png,gif,coffee,styl,jade}' ]
-          dest: 'public'
+          dest: 'public/'
         }]
 
     imagemin:
@@ -64,7 +64,7 @@ module.exports = (grunt) ->
           expand: yes
           cwd: 'app/assets/'
           src: [ '**/*.{jpg,png,gif}' ]
-          dest: 'public'
+          dest: 'public/'
         }]
 
     coffeelint:
