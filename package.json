@@ -1,0 +1,40 @@
+{
+  "name": "application-name",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "prestart": "grunt build",
+    "start": "coffee config/web.coffee",
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "express": "*",
+    "jade": "*",
+    "direquire": "0.0.3",
+    "mongoose": "*",
+    "debug": "~0.7.4"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.6.3",
+    "coffee-errors": "~0.8.5",
+    "lodash": "~2.4.1",
+    "supertest": "~0.8.0",
+    "mocha": "~1.13.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-stylus": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-jade": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-csslint": "*",
+    "grunt-contrib-imagemin": "~0.5.0",
+    "grunt-contrib-copy": "*",
+    "grunt-simple-mocha": "*",
+    "grunt-notify": "*",
+    "grunt-coffeelint": "*",
+    "grunt-express-server": "*",
+    "grunt-htmlhint": "*",
+    "grunt-concurrent": "*"
+  }
+}
