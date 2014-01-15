@@ -3,7 +3,7 @@
 fs = require 'fs'
 path = require 'path'
 http = require 'http'
-debug = require('debug')('coah:app')
+debug = require('debug')('coah')
 express = require 'express'
 mongoose = require 'mongoose'
 direquire = require 'direquire'
