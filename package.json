@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "prestart": "grunt build",
-    "start": "coffee config/web.coffee",
+    "start": "grunt server",
+    "pretest": "grunt build",
     "test": "grunt test"
   },
   "dependencies": {

@@ -5,6 +5,8 @@ module.exports = (grunt) ->
   require 'coffee-script'
   require 'coffee-errors'
 
+  path = require 'path'
+
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
   grunt.loadNpmTasks 'grunt-contrib-jade'
@@ -20,23 +22,58 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-notify'
   grunt.loadNpmTasks 'grunt-concurrent'
 
+  grunt.registerTask 'build', [
+    'clean'
+    'concurrent:build'
+    'buildstatic'
+  ]
+
   grunt.registerTask 'test', [
     'concurrent:test'
   ]
-  grunt.registerTask 'build', [
-    'clean', 'concurrent:build', 'imagemin'
+
+  grunt.registerTask 'coah', 'Waiting async.', ->
+    done = @async()
+
+  grunt.registerTask 'server', [ 'run', 'coah' ]
+
+  grunt.registerTask 'run', 'Start coah web server.', ->
+    done = @async()
+    {server} = require path.resolve 'config', 'app'
+    grunt.log.writeln "coah running mode #{process.env.NODE_ENV}"
+    server.listen (process.env.PORT || 3000), ->
+      grunt.log.write "coah listening on port #{process.env.PORT || 3000}\n"
+      return done()
+
+  grunt.registerTask 'all', [
+    'build', 'test', 'run', 'watch'
   ]
-  grunt.registerTask 'buildjs', [
-    'coffee:dist', 'coffeelint:client', 'uglify'
-  ]
-  grunt.registerTask 'buildcss', [
-    'stylus:dist', 'csslint:client', 'stylus:release'
-  ]
-  grunt.registerTask 'buildhtml', [
-    'jade:dist', 'htmlhint:client', 'jade:release'
-  ]
+
   grunt.registerTask 'default', [
     'build', 'test', 'watch'
+  ]
+
+  grunt.registerTask 'buildjs', [
+    'coffee:dist'
+    'coffeelint:client'
+    'uglify'
+  ]
+
+  grunt.registerTask 'buildcss', [
+    'stylus:dist'
+    'csslint:client'
+    'stylus:release'
+  ]
+
+  grunt.registerTask 'buildhtml', [
+    'jade:dist'
+    'htmlhint:client'
+    'jade:release'
+  ]
+
+  grunt.registerTask 'buildstatic', [
+    'copy'
+    'imagemin'
   ]
 
   grunt.initConfig
@@ -45,7 +82,7 @@ module.exports = (grunt) ->
 
     concurrent:
       test: [ 'coffeelint:server', 'simplemocha' ]
-      build: [ 'buildjs', 'buildcss', 'buildhtml', 'copy' ]
+      build: [ 'buildjs', 'buildcss', 'buildhtml' ]
 
     clean:
       dist: [ '.tmp' ]
@@ -211,17 +248,20 @@ module.exports = (grunt) ->
         interrupt: yes
         spawn: no
       static:
-        tasks: [ 'clean', 'copy', 'imagemin' ]
+        tasks: [ 'buildstatic' ]
         files: [ 'app/assets/**/*', '!app/assets/**/*.{coffee,styl,jade}' ]
       coffee:
-        tasks: [ 'concurrent:buildjs' ]
+        tasks: [ 'buildjs' ]
         files: [ 'app/assets/**/*.coffee' ]
       stylus:
-        tasks: [ 'concurrent:buildcss' ]
+        tasks: [ 'buildcss' ]
         files: [ 'app/assets/**/*.styl' ]
       jade:
-        tasks: [ 'concurrent:buildhtml' ]
+        tasks: [ 'buildhtml' ]
         files: [ 'app/assets/**/*.jade' ]
       test:
         tasks: [ 'concurrent:test' ]
-        files: [ 'app/**/*.coffee', '!app/assets' ]
+        files: [
+          '{tests,config,app}/**/*.{js,coffee,json}'
+          '!app/assets'
+        ]

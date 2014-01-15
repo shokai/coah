@@ -2,7 +2,7 @@
 
 fs = require 'fs'
 path = require 'path'
-util = require 'util'
+http = require 'http'
 debug = require('debug')('coah:app')
 express = require 'express'
 mongoose = require 'mongoose'
@@ -17,15 +17,15 @@ if fs.existsSync env = path.resolve 'config', 'env'
 
 process.env.NODE_ENV or= 'development'
 
-
 # Database
 
-mongoose.connect process.env.MONGO
-debug "mongo connect to #{process.env.MONGO}"
+if process.env.MONGO
+  mongoose.connect process.env.MONGO
+  debug "mongo connect to #{process.env.MONGO}"
 
 # Application
 
-app = exports = module.exports = express()
+app = exports.app = express()
 app.disable 'x-powerd-by'
 app.set 'events', direquire path.resolve 'app', 'events'
 app.set 'models', direquire path.resolve 'app', 'models'
@@ -52,10 +52,11 @@ if process.env.NODE_ENV isnt 'production'
 
 # Routes
 
-( ->
-  Content = (app.get 'events').Content app
+Content = (app.get 'events').Content app
 
-  app.get '/:username',  Content.user
+app.get '/:username',  Content.user
 
-)()
 
+# Server
+
+server = exports.server = http.createServer app

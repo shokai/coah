@@ -6,3 +6,4 @@ node_modules
 .tmp
 public
 config/env.json
+npm-debug.log
