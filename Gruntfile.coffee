@@ -1,11 +1,11 @@
 'use strict'
 
+path = require 'path'
+
 module.exports = (grunt) ->
 
   require 'coffee-script'
   require 'coffee-errors'
-
-  path = require 'path'
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
@@ -246,7 +246,7 @@ module.exports = (grunt) ->
       options:
         livereload: yes
         interrupt: yes
-        spawn: no
+        spawn: yes
       static:
         tasks: [ 'buildstatic' ]
         files: [ 'app/assets/**/*', '!app/assets/**/*.{coffee,styl,jade}' ]

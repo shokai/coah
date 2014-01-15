@@ -1,2 +1,2 @@
 main: grunt server
-watch: grunt all
+watch: grunt default

@@ -10,10 +10,9 @@ direquire = require 'direquire'
 
 # Environment
 
-if fs.existsSync env = path.resolve 'config', 'env'
-  for k, v of require env
-    debug "mapping env #{k.toUpperCase()} -> #{v}"
-    process.env[k.toUpperCase()] = v
+for k, v of require path.resolve 'config', 'env'
+  debug "mapping env #{k.toUpperCase()} -> #{v}"
+  process.env[k.toUpperCase()] = v
 
 process.env.NODE_ENV or= 'development'
 
@@ -33,18 +32,13 @@ app.set 'helper', direquire path.resolve 'app', 'helper'
 app.set 'views', path.resolve 'app', 'views'
 app.set 'view engine', 'jade'
 app.use express.favicon()
-unless process.env.NODE_ENV is 'test'
-  app.use express.logger 'dev'
+app.use express.logger 'dev' unless process.env.NODE_ENV is 'test'
 app.use express.json()
 app.use express.urlencoded()
 app.use express.methodOverride()
-app.use (req, res, next) ->
-  app.locals.pretty = process.env.NODE_ENV isnt 'production'
-  app.locals.req = req
-  app.locals.res = res
-  return next()
 app.use app.router
 app.use express.static path.resolve 'public'
+
 if process.env.NODE_ENV isnt 'production'
   app.use express.errorHandler()
   debug "using error handler"
