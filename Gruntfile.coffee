@@ -35,7 +35,7 @@ module.exports = (grunt) ->
     'jade:dist', 'htmlhint:client', 'jade:release'
   ]
   grunt.registerTask 'buildstatic', [
-    'copy', 'imagemin'
+    'imagemin'
   ]
   grunt.registerTask 'default', [
     'build', 'test', 'watch'
@@ -55,6 +55,7 @@ module.exports = (grunt) ->
           expand: yes
           cwd: 'app/assets/'
           src: [ '!**/*.{jpg,png,gif,coffee,styl,jade}' ]
+          #src: [ '!**/*.{coffee,styl,jade}' ]
           dest: 'public/'
         }]
 
