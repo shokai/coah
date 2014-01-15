@@ -10,9 +10,10 @@ direquire = require 'direquire'
 
 # Environment
 
-for k, v of require path.resolve 'config', 'env'
-  debug "mapping env #{k.toUpperCase()} -> #{v}"
-  process.env[k.toUpperCase()] = v
+if fs.existsSync env = path.resolve 'config', 'env'
+  for k, v of require env
+    debug "mapping env #{k.toUpperCase()} -> #{v}"
+    process.env[k.toUpperCase()] = v
 
 process.env.NODE_ENV or= 'development'
 

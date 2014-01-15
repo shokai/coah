@@ -11,6 +11,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-csslint'
   grunt.loadNpmTasks 'grunt-contrib-imagemin'
+  grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-htmlhint'
@@ -23,7 +24,7 @@ module.exports = (grunt) ->
     'concurrent:test'
   ]
   grunt.registerTask 'build', [
-    'concurrent:build'
+    'clean', 'concurrent:build', 'imagemin'
   ]
   grunt.registerTask 'buildjs', [
     'coffee:dist', 'coffeelint:client', 'uglify'
@@ -33,9 +34,6 @@ module.exports = (grunt) ->
   ]
   grunt.registerTask 'buildhtml', [
     'jade:dist', 'htmlhint:client', 'jade:release'
-  ]
-  grunt.registerTask 'buildstatic', [
-    'imagemin'
   ]
   grunt.registerTask 'default', [
     'build', 'test', 'watch'
@@ -47,16 +45,26 @@ module.exports = (grunt) ->
 
     concurrent:
       test: [ 'coffeelint:server', 'simplemocha' ]
-      build: [ 'buildjs', 'buildcss', 'buildhtml', 'buildstatic' ]
+      build: [ 'buildjs', 'buildcss', 'buildhtml', 'copy' ]
+
+    clean:
+      dist: [ '.tmp' ]
+      release: [ 'public' ]
 
     copy:
       dist:
         files: [{
           expand: yes
           cwd: 'app/assets/'
-          src: [ '!**/*.{jpg,png,gif,coffee,styl,jade}' ]
-          #src: [ '!**/*.{coffee,styl,jade}' ]
-          dest: 'public/'
+          src: [ '**/*' , '!**/*.{coffee,styl,jade}' ]
+          dest: '.tmp'
+        }]
+      release:
+        files: [{
+          expand: yes
+          cwd: 'app/assets/'
+          src: [ '**/*', '!**/*.{jpg,png,gif,coffee,styl,jade}' ]
+          dest: 'public'
         }]
 
     imagemin:
@@ -202,6 +210,9 @@ module.exports = (grunt) ->
         livereload: yes
         interrupt: yes
         spawn: no
+      static:
+        tasks: [ 'clean', 'copy', 'imagemin' ]
+        files: [ 'app/assets/**/*', '!app/assets/**/*.{coffee,styl,jade}' ]
       coffee:
         tasks: [ 'concurrent:buildjs' ]
         files: [ 'app/assets/**/*.coffee' ]
