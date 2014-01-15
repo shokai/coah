@@ -6,6 +6,21 @@
 
 coah, node.js WAF template.
 
+## about
+
+:-)          | details
+-------------|-------------------------------
+`coffee`     | lint -> build -> minimize
+`stylus`     | build -> lint -> minimize
+`jade`       | build -> lint -> minimize
+`image`      | minimize image (jpg, png, gif)
+`copy`       | copy static files
+`test`       | test with mocha
+`notify`     | fail notification
+`concurrent` | concurrent unordered task
+`println`    | print coffee-script error lineno
+
+
 ## install
 
     git clone https://github.com/geta6/coah
@@ -16,46 +31,68 @@ coah, node.js WAF template.
 
     cp config/env.json{.sample,}
 
-## client
+## grunt tasks
 
 ### build
+
+  grunt build your assets.
 
     grunt build
 
 ### test
 
+  grunt exec your test by mocha.
+
     grunt test
 
+### server
+
+  grunt run `config/app.coffee`.
+
+    grunt server
 
 ### watch
 
+  grunt watch and build your assets.
+
     grunt watch
+
+### build -> test -> server -> watch
+
+  grunt exec all tasks.
+
+    grunt all
 
 ### build -> test -> watch
 
+  grunt exec tasks for assets.
+
     grunt
 
-## server
+
+## npm
+
+### test
+
+  run grunt build before starting server.
+
+    $ npm test
+
+    # is equal to
+
+    $ grunt build
+    $ grunt test
 
 ### start
 
-  run grunt build before starting server
+  run grunt build before starting server, not watch.
 
-    npm start
+    $ npm start
 
-### debug
+    # is equal to
 
-    NODE_ENV=development DEBUG='coah*' npm start
-
-## process manager
-
-### pm2
-
-    pm2 start config/web.coffee
-
-### foreman
-
-    foreman start
+    $ grunt build
+    $ grunt server
 
 
 ## MIT LICENSE

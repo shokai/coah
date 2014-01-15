@@ -32,10 +32,10 @@ module.exports = (grunt) ->
     'concurrent:test'
   ]
 
+  grunt.registerTask 'server', [ 'run', 'coah' ]
+
   grunt.registerTask 'coah', 'Waiting async.', ->
     done = @async()
-
-  grunt.registerTask 'server', [ 'run', 'coah' ]
 
   grunt.registerTask 'run', 'Start coah web server.', ->
     done = @async()
